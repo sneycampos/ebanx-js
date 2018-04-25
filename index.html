@@ -199,29 +199,29 @@
         let responseDiv = document.getElementById('response');
 
         axios.post('http://localhost:8000/checkout',
-        {
-            'name': document.getElementById('name').value,
-            'email': document.getElementById('email').value,
-            'document': document.getElementById('document').value,
-            'address': document.getElementById('address').value,
-            'street_number': document.getElementById('street_number').value,
-            'city': document.getElementById('city').value,
-            'state': document.getElementById('state').value,
-            'zipcode': document.getElementById('zipcode').value,
-            'country': document.getElementById('country').value,
-            'phone_number': document.getElementById('phone_number').value,
-            'payment_type_code': document.getElementById('paymentMethod').value,
-            'currency_code': 'BRL',
-            'amount_total': document.getElementById('plan').value,
+            {
+                'name': document.getElementById('name').value,
+                'email': document.getElementById('email').value,
+                'document': document.getElementById('document').value,
+                'address': document.getElementById('address').value,
+                'street_number': document.getElementById('street_number').value,
+                'city': document.getElementById('city').value,
+                'state': document.getElementById('state').value,
+                'zipcode': document.getElementById('zipcode').value,
+                'country': document.getElementById('country').value,
+                'phone_number': document.getElementById('phone_number').value,
+                'payment_type_code': document.getElementById('paymentMethod').value,
+                'currency_code': 'BRL',
+                'amount_total': document.getElementById('plan').value,
 
-            'creditcard': {
-                'card_name': document.getElementById('card_holder_name').value,
-                'card_due_date': document.getElementById('card_due_date').value,
-                'card_number': document.getElementById("card_number").value,
-                'card_cvv': document.getElementById('card_cvv').value,
-                'auto_capture': true
-            }
-        })
+                'creditcard': {
+                    'card_name': document.getElementById('card_holder_name').value,
+                    'card_due_date': document.getElementById('card_due_date').value,
+                    'card_number': document.getElementById("card_number").value,
+                    'card_cvv': document.getElementById('card_cvv').value,
+                    'auto_capture': true
+                }
+            })
             .then(response => {
                 if (response.data.status === 'ERROR') {
                     responseDiv.innerHTML = response.data.status_message;
@@ -234,14 +234,12 @@
                     //boleto bancário
                     if (payment.boleto_url) {
                         responseDiv.innerHTML = 'Boleto gerado com sucesso: ' + payment.boleto_url;
-                        window.open(response.data.payment.boleto_url, '_blank')
+                        window.open(payment.boleto_url, '_blank')
                     } else {
-                    //cartão de crédito
-                        responseDiv.innerHTML = response.data.message;
-                        alert(response.data.message);
+                        //cartão de crédito
+                        responseDiv.innerHTML = 'Pagamento efetuado com sucesso! ' + payment.transaction_status.description;
+                        alert(payment.transaction_status.description);
                     }
-
-
                 }
             })
             .catch(error => {

@@ -13,7 +13,6 @@ ebanx.configure({
 app.use(bodyParser.json());
 
 app.post('/checkout', function (req, res) {
-
     // console.log('Requisição recebida');
 
     data = req.body;
@@ -34,16 +33,13 @@ app.post('/checkout', function (req, res) {
             merchant_payment_code: Math.random().toString(36).substring(2),
             currency_code: data.currency_code,
             amount_total: data.amount_total,
-
-            creditcard: {
-                card_name: data.card_name,
-                card_due_date: data.card_due_date,
-                card_number: data.card_number,
-                card_cvv: data.card_cvv,
-                auto_capture: true
-            }
         }
     };
+
+    if(data.payment_type_code === 'visa')
+    {
+        params.payment.creditcard = data.creditcard;
+    }
 
     ebanx.direct(params, function (err, reply) {
         if (err) {
